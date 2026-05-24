@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PesaCoin: Install Backend Dependencies",
+      "type": "shell",
+      "command": "npm install",
+      "problemMatcher": []
+    },
+    {
+      "label": "PesaCoin: Install Frontend Dependencies",
+      "type": "shell",
+      "command": "npm run frontend:install",
+      "problemMatcher": []
+    },
+    {
+      "label": "PesaCoin: Build Frontend",
+      "type": "shell",
+      "command": "npm run build",
+      "problemMatcher": []
+    },
+    {
+      "label": "PesaCoin: Start Backend Production",
+      "type": "shell",
+      "command": "npm run start:prod",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

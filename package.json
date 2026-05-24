@@ -1,23 +1,39 @@
 {
   "name": "pesacoin",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "PesaCoin stablecoin gateway with M-Pesa and blockchain integration.",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
+    "dev": "concurrently \"npm run frontend:dev\" \"npx nodemon server.js\"",
+    "start": "node server.js",
+    "start:prod": "NODE_ENV=production node server.js",
+    "frontend:install": "npm install --prefix frontend",
+    "frontend:dev": "npm run dev --prefix frontend",
+    "frontend:build": "npm run build --prefix frontend",
+    "build": "npm run frontend:build",
+    "lint": "echo \"No linting configured yet. Add ESLint or TypeScript for code quality.\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["stablecoin","mpesa","ethereum","vite","react"],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@openzeppelin/contracts": "^5.6.1",
     "axios": "^1.16.1",
-    "body-parser": "^2.2.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "ethers": "^6.16.0",
     "express": "^5.2.1",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^7.0.0",
     "luxon": "^3.7.2",
-    "solc": "^0.8.20"
+    "morgan": "^1.10.0",
+    "solc": "^0.8.20",
+    "envalid": "^7.3.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.9.0",
+    "nodemon": "^3.0.1"
   }
 }

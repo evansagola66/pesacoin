@@ -5,11 +5,12 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract PesaCoin is ERC20, Ownable {
-    constructor() ERC20("PesaCoin", "PESA") Ownable(msg.sender) {}
+    constructor() ERC20("PesaCoin", "PESA") {
+        // Ownable automatically sets the deployer as the owner.
+    }
 
     // 1 PesaCoin = 1 KES
-    // We use 18 decimals like standard ETH tokens, or 0 if you want simplicity.
-    // To match standard ERC20, we'll use 18.
+    // We use 18 decimals like standard ETH tokens.
     function decimals() public view virtual override returns (uint8) {
         return 18;
     }

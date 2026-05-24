@@ -2,18 +2,39 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Wallet, ArrowDownCircle, ArrowUpCircle, Send, ShieldCheck, Coins } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+
 function App() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [amount, setAmount] = useState('');
   const [walletAddress, setWalletAddress] = useState('');
+  const [registerPhoneNumber, setRegisterPhoneNumber] = useState('');
+  const [registerWalletAddress, setRegisterWalletAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await axios.post(`${API_BASE}/user/register`, {
+        phoneNumber: registerPhoneNumber,
+        walletAddress: registerWalletAddress,
+      });
+      setMessage({ type: 'success', text: 'Wallet registered successfully.' });
+      setRegisterPhoneNumber('');
+      setRegisterWalletAddress('');
+    } catch (err) {
+      setMessage({ type: 'error', text: err.response?.data?.message || 'Registration failed' });
+    }
+    setLoading(false);
+  };
 
   const handleDeposit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('/api/wallet/deposit', { phoneNumber, amount });
+      const res = await axios.post(`${API_BASE}/wallet/deposit`, { phoneNumber, amount });
       setMessage({ type: 'success', text: 'STK Push sent! Please enter your PIN on your phone.' });
     } catch (err) {
       setMessage({ type: 'error', text: err.response?.data?.message || 'Deposit failed' });
@@ -25,7 +46,7 @@ function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post('/api/wallet/withdraw', { phoneNumber, amount, walletAddress });
+      const res = await axios.post(`${API_BASE}/wallet/withdraw`, { phoneNumber, amount, walletAddress });
       setMessage({ type: 'success', text: 'Withdrawal successful! Check your M-Pesa.' });
     } catch (err) {
       setMessage({ type: 'error', text: err.response?.data?.message || 'Withdrawal failed' });
@@ -56,6 +77,48 @@ function App() {
             {message.text}
           </div>
         )}
+
+        <section className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-3 bg-slate-100 text-slate-700 rounded-xl">
+              <Wallet size={24} />
+            </div>
+            <h2 className="text-xl font-bold">Register Wallet</h2>
+          </div>
+          <form onSubmit={handleRegister} className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-1">Phone Number</label>
+              <input
+                type="text"
+                placeholder="254712345678"
+                className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition-all"
+                value={registerPhoneNumber}
+                onChange={(e) => setRegisterPhoneNumber(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-1">Wallet Address</label>
+              <input
+                type="text"
+                placeholder="0x..."
+                className="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition-all"
+                value={registerWalletAddress}
+                onChange={(e) => setRegisterWalletAddress(e.target.value)}
+                required
+              />
+            </div>
+            <div className="md:col-span-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-xl transition-colors disabled:opacity-50"
+              >
+                {loading ? 'Registering...' : 'Register Wallet'}
+              </button>
+            </div>
+          </form>
+        </section>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Deposit Section */}
